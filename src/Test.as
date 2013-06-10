@@ -6,15 +6,23 @@ package
 	import com.debug.logging.logger.appender.ConsoleLogAppender;
 
 	import flash.display.Sprite;
-	import flash.events.MouseEvent;
+    import flash.display.StageAlign;
+    import flash.display.StageScaleMode;
+    import flash.events.MouseEvent;
+    import flash.ui.Keyboard;
 
-	public class Test extends Sprite
+    import org.osmf.layout.ScaleMode;
+
+    public class Test extends Sprite
 	{
 		private var logger:Logger = Logger.getLogger(Test);
 
 		public function Test()
 		{
-			logger.addAppender(new ConsoleLogAppender(this, 192))
+            stage.scaleMode = StageScaleMode.NO_SCALE;
+            stage.align = StageAlign.TOP_LEFT;
+
+			logger.addAppender(new ConsoleLogAppender(this, Keyboard.A));
 
 			Console.stage = this;
 
