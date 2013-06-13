@@ -11,8 +11,7 @@ package
     import flash.events.MouseEvent;
     import flash.ui.Keyboard;
 
-    import org.osmf.layout.ScaleMode;
-
+	[SWF(width="800", height="600")]
     public class Test extends Sprite
 	{
 		private var logger:Logger = Logger.getLogger(Test);

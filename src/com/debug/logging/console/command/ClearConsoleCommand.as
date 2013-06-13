@@ -2,7 +2,7 @@ package com.debug.logging.console.command
 {
     import com.debug.logging.console.view.ConsoleViewer;
 
-    public class CopyConsoleCommand implements IConsoleCommand
+    public class ClearConsoleCommand implements IConsoleCommand
     {
 		/**
 		 * Reference to current console viewer.
@@ -15,7 +15,7 @@ package com.debug.logging.console.command
 		 * @param console Reference to current console viewer.
 		 * @see ConsoleViewer
 		 */
-        public function CopyConsoleCommand(console:ConsoleViewer)
+        public function ClearConsoleCommand(console:ConsoleViewer)
         {
             this.console = console;
         }
@@ -25,7 +25,7 @@ package com.debug.logging.console.command
          */
         public function execute(...args):void
         {
-            console.copy();
+            console.clear();
         }
 
         /**
@@ -33,7 +33,7 @@ package com.debug.logging.console.command
          */
         public function get name():String
         {
-            return "copy";
+            return "clear";
         }
 
         /**
@@ -41,7 +41,7 @@ package com.debug.logging.console.command
          */
         public function get description():String
         {
-            return "Copy the console to the clipboard.";
+            return "Clears the console history.";
         }
     }
 }

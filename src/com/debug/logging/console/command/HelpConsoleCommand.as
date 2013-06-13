@@ -30,7 +30,7 @@ package com.debug.logging.console.command
 			// display some options for use
 			logger.info("Keyboard shortcuts: ");
 			logger.info("[SHIFT]-TAB - Cycle through auto-completed commands.");
-			logger.info("PgUp/PgDn - Page log view up/down a page.");
+//			logger.info("PgUp/PgDn - Page log view up/down a page.");
 			logger.info("");
 
 			// do the sort before display commands

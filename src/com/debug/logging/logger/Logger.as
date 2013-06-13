@@ -19,7 +19,9 @@ package com.debug.logging.logger
 		 */
 		private static var classNameCache:Dictionary;
 
-		// init point for logging
+		/**
+		 *  Initialize.
+		 */
 		{
 			classNameCache = new Dictionary(true);
 
@@ -52,7 +54,7 @@ package com.debug.logging.logger
 		 */
 		public static function getCallStack(print:Boolean = false):String
 		{
-			var stack:String
+			var stack:String;
 			try
 			{
 				stack = new Error().getStackTrace();
@@ -63,7 +65,7 @@ package com.debug.logging.logger
 			}
 			finally
 			{
-				print && trace(stack);
+				print && debug(null, stack);
 			}
 
 			return stack;

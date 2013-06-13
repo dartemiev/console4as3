@@ -11,8 +11,15 @@ package com.debug.logging.console
 
 	public class Console
 	{
+		/**
+		 * Reference to stage of application.
+		 */
 		public static var stage:DisplayObjectContainer;
 
+		/**
+		 * Instance of logger.
+		 * @see Logger
+		 */
 		public static const logger:Logger = Logger.getLogger(Console);
 
 		/**
@@ -63,9 +70,6 @@ package com.debug.logging.console
 		 */
 		public static function processLine(line:String):void
 		{
-			// Make sure everything is in order.
-//			ensureCommandsOrdered();
-
 			// Match tokens, this allows for text to be split by spaces excluding spaces between quotes.
 			// TODO Allow escaping of quotes
 			var pattern:RegExp = /[^\s"']+|"[^"]*"|'[^']*'/g;
@@ -101,7 +105,12 @@ package com.debug.logging.console
 			}
 		}
 
-
+		/**
+		 * Command validation.
+		 * @param command Checking command.
+		 * @return valid/invalid status by checking command.
+		 * @see IConsoleCommand
+		 */
 		private static function validateCommand(command:IConsoleCommand):Boolean
 		{
 			// sanity checks command
@@ -125,6 +134,16 @@ package com.debug.logging.console
 				return false;
 			}
 			return true;
+		}
+
+		/**
+		 * Get full list of available console command.
+		 * @return List of available console command.
+		 * @see IConsoleCommand
+		 */
+		public static function getCommandList():Vector.<IConsoleCommand>
+		{
+			return commandList;
 		}
 	}
 }
