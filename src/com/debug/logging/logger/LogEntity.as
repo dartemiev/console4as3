@@ -1,8 +1,6 @@
 package com.debug.logging.logger
 {
-	import com.pool.IDispose;
-
-	internal class LogEntity implements IDispose
+	internal class LogEntity
 	{
 		/**
 		 *  The object that printed the message to the log.
@@ -14,26 +12,13 @@ package com.debug.logging.logger
 		 */
 		public var message:String = "";
 
-		public static function newInstance(reporter:Class, message:String):LogEntity
-		{
-			// TODO : create pool for log entities
-			var instance:LogEntity = new LogEntity();
-			instance.reporter = reporter;
-			instance.message = message;
-			return instance;
-		}
-
 		/**
-		 * com.debug.logging.logger.LogEntity. Constructor.
+		 * LogEntity. Constructor.
 		 */
 		public function LogEntity(reporter:Class = null, message:String = null)
 		{
 			this.reporter = reporter;
 			this.message = message;
-		}
-
-		public function dispose():void
-		{
 		}
 	}
 }

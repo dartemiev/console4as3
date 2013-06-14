@@ -14,16 +14,28 @@ package com.debug.logging.console.view
     import flash.text.TextField;
     import flash.text.TextFieldType;
     import flash.text.TextFormat;
-    import flash.ui.Keyboard;
+	import flash.text.TextLineMetrics;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 
 	public class ConsoleViewer extends Sprite implements ILogAppender
 	{
         protected static const PADDING:int = 5;
 
+		/**
+		 * Instance of console command line.
+		 * @see TextField
+		 */
         protected var commandLine:TextField;
-
+		/**
+		 * Instance of console output.
+		 * @see TextField
+		 */
         protected var outputField:TextField;
+		/**
+		 * Map of press handlers. Define handler by each typing key in console command line.
+		 */
+		private var pressHandlerMap:Dictionary;
 		/**
 		 * List of logged messages. It's history by logging.
 		 * @see History
@@ -38,11 +50,6 @@ package com.debug.logging.console.view
 		 * @default -1
 		 */
 		private var consoleHistoryIndex:int = -1;
-		/**
-		 * Map of press handlers. Define handler by each typing key in console command line.
-		 */
-		private var pressHandlerMap:Dictionary;
-
         /**
          * Prefix for string in auto-complete mode.
          */
@@ -63,12 +70,12 @@ package com.debug.logging.console.view
 		public function ConsoleViewer()
 		{
 			super();
-
+			// initialize console stuff
 			loggingHistory = new <History>[];
 			consoleHistory = new <String>[];
             Console.registerCommand(new CopyConsoleCommand(this));
             Console.registerCommand(new ClearConsoleCommand(this));
-
+			// initialize key management handlers
 			pressHandlerMap = new Dictionary(true);
 			pressHandlerMap[Keyboard.ENTER] = onEnterPressed;
 			pressHandlerMap[Keyboard.SPACE] = onSpacePressed;
@@ -100,6 +107,31 @@ package com.debug.logging.console.view
 			}
         }
 
+		public function activate():void
+		{
+			resize();
+
+			commandLine.text = "";
+			commandLine.addEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement, false, 0, true);
+			stage.focus = commandLine;
+
+			addEventListener(MouseEvent.CLICK, onSetFocus, false, 0, true);
+			addEventListener(MouseEvent.DOUBLE_CLICK, onCopyLogToClipboard, false, 0, true);
+			stage.addEventListener(Event.RESIZE, resize, false, 0, true);
+		}
+
+		public function deactivate():void
+		{
+			if (stage == null) return;
+
+			stage.focus = null;
+			commandLine.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement);
+
+			removeEventListener(MouseEvent.CLICK, onSetFocus);
+			removeEventListener(MouseEvent.DOUBLE_CLICK, onCopyLogToClipboard);
+			stage.removeEventListener(Event.RESIZE, resize);
+		}
+
 		/**
 		 * Update console view by list of history.
 		 */
@@ -122,29 +154,10 @@ package com.debug.logging.console.view
             var format:TextFormat = outputField.getTextFormat(startIndex, endIndex);
             format.color = color;
             outputField.setTextFormat(format, startIndex, endIndex);
-//            outputField.htmlText = "<font color=" + color + ">" + text + "</font>\n";
-			outputField.scrollV = outputField.maxScrollV
+			outputField.scrollV = outputField.maxScrollV;
         }
 
-		public function activate():void
-		{
-            resize();
 
-			stage.focus = commandLine;
-			commandLine.text = "";
-			commandLine.addEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement, false, 0, true);
-
-		}
-
-
-
-		public function deactivate():void
-		{
-			if (stage == null) return;
-
-            stage.focus = null;
-            commandLine.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement);
-		}
 
 		/**
 		 * Copy full history list to clipboard.
@@ -168,7 +181,6 @@ package com.debug.logging.console.view
 		public function clear():void
 		{
 			loggingHistory.length = 0;
-//			consoleHistoryIndex = -1;
 			updateHistoryView();
 		}
 
@@ -185,7 +197,7 @@ package com.debug.logging.console.view
             consoleHistoryIndex = consoleHistory.length;
         }
 
-        protected function resize():void
+        protected function resize(event:Event = null):void
         {
             var width:Number = stage.stageWidth - 1;
             var height:Number = (stage.stageHeight / 3) * 2;
@@ -403,10 +415,6 @@ package com.debug.logging.console.view
             mouseEnabled = doubleClickEnabled = true;
 
 			updateHistoryView();
-
-//            addEventListener(Event.RESIZE, resize);
-            addEventListener(MouseEvent.CLICK, onSetFocus);
-            addEventListener(MouseEvent.DOUBLE_CLICK, onCopyLogToClipboard);
         }
 
 	    /**

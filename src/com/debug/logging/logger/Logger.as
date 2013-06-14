@@ -78,7 +78,7 @@ package com.debug.logging.logger
 		 */
 		public static function info(reporter:*, message:String):void
 		{
-			process(LogEntity.newInstance(reporter, message), LogLevel.INFO);
+			process(new LogEntity(reporter, message), LogLevel.INFO);
 		}
 
 		/**
@@ -88,7 +88,7 @@ package com.debug.logging.logger
 		 */
 		public static function debug(reporter:*, message:String):void
 		{
-			process(LogEntity.newInstance(reporter, message), LogLevel.DEBUG);
+			process(new LogEntity(reporter, message), LogLevel.DEBUG);
 		}
 
 		/**
@@ -98,7 +98,7 @@ package com.debug.logging.logger
 		 */
 		public static function warn(reporter:*, message:String):void
 		{
-			process(LogEntity.newInstance(reporter, message), LogLevel.WARNING);
+			process(new LogEntity(reporter, message), LogLevel.WARNING);
 		}
 
 		/**
@@ -108,7 +108,7 @@ package com.debug.logging.logger
 		 */
 		public static function error(reporter:*, message:String):void
 		{
-			process(LogEntity.newInstance(reporter, message), LogLevel.ERROR);
+			process(new LogEntity(reporter, message), LogLevel.ERROR);
 		}
 
 		/**
@@ -124,7 +124,6 @@ package com.debug.logging.logger
 			for each(var appender:ILogAppender in appenders)
 			{
 				appender.log(type, getReporterClassName(entity.reporter), entity.message);
-				entity.dispose();
 			}
 		}
 
