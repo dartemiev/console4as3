@@ -6,9 +6,6 @@ package com.debug.logging.console.view
 	import com.debug.logging.console.command.IConsoleCommand;
 	import com.debug.logging.logger.appender.ILogAppender;
 
-    import flash.display.Bitmap;
-    import flash.display.BitmapData;
-
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.events.KeyboardEvent;
@@ -22,14 +19,11 @@ package com.debug.logging.console.view
 
 	public class ConsoleViewer extends Sprite implements ILogAppender
 	{
-        protected var commandLine:TextField;
-        /**
-         * The bitmap where should write all log messages instead creation
-         * new text fields with predefined settings.
-         */
-        protected var output:Bitmap;
+        protected static const PADDING:int = 5;
 
-        private var outputField:TextField;
+        protected var commandLine:TextField;
+
+        protected var outputField:TextField;
 		/**
 		 * List of logged messages. It's history by logging.
 		 * @see History
@@ -49,12 +43,19 @@ package com.debug.logging.console.view
 		 */
 		private var pressHandlerMap:Dictionary;
 
+        /**
+         * Prefix for string in auto-complete mode.
+         */
 		private var autoCompletePrefix:String;
 		/**
 		 * Flag of auto-complete mode.
 		 */
 		private var autoCompleteMode:Boolean;
-		private var autoCompleteIndex:int;
+        /**
+         * Current index in list of available command in auto-complete mode.
+         * @default -1
+         */
+		private var autoCompleteIndex:int = -1;
 
 		/**
 		 * ConsoleViewer. Constructor.
@@ -113,7 +114,15 @@ package com.debug.logging.console.view
 
         private function displayLine(text:String, color:uint):void
         {
+            var startIndex:int = outputField.text.length;
+            var endIndex:int = startIndex + text.length;
+
             outputField.appendText(text + "\n");
+
+            var format:TextFormat = outputField.getTextFormat(startIndex, endIndex);
+            format.color = color;
+            outputField.setTextFormat(format, startIndex, endIndex);
+//            outputField.htmlText = "<font color=" + color + ">" + text + "</font>\n";
 			outputField.scrollV = outputField.maxScrollV
         }
 
@@ -186,19 +195,14 @@ package com.debug.logging.console.view
             graphics.drawRect(0, 0, width, height);
             graphics.endFill();
             // updateHistoryView size of command line
-            commandLine.x = 5;
+            commandLine.x = PADDING;
             commandLine.height = 18;
-            commandLine.width = width - 10;
-            commandLine.y = height - commandLine.height - 3;
-            // updateHistoryView drawable bitmap
-            output.x = 5;
-            output.y = 0;
-            output.bitmapData.dispose();
-            output.bitmapData = new BitmapData(width - 10, height - 30, false, 0x0000000);
+            commandLine.width = width - 2 * PADDING;
+            commandLine.y = height - commandLine.height - PADDING;
 
             outputField.width = width - 10;
-            outputField.height = height - 28;
-            outputField.x = outputField.y = 5;
+            outputField.height = height - commandLine.height - 3 * PADDING;
+            outputField.x = outputField.y = PADDING;
         }
 
         protected function createInputField():TextField
@@ -345,7 +349,8 @@ package com.debug.logging.console.view
 			{
 				// set flag about enter in autoCompleteMode
 				autoCompletePrefix = input;
-				autoCompleteIndex = ++autoCompleteIndex % available.length;
+                (event.shiftKey) ? autoCompleteIndex-- : autoCompleteIndex++;
+				autoCompleteIndex = (autoCompleteIndex + available.length) % available.length;
 				autoCompleteMode = true;
 				// preset auto-complete selection
 				var potential:String = available[autoCompleteIndex].name;
@@ -357,8 +362,7 @@ package com.debug.logging.console.view
 				stage.focus = commandLine;
 				stage.stageFocusRect = stageFocusRect;
 			}
-
-			event.preventDefault();
+            event.preventDefault();
 		}
 
 		/**
@@ -385,8 +389,6 @@ package com.debug.logging.console.view
         {
             removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 
-            output = new Bitmap(new BitmapData(640, 480, false, 0x0));
-            addChild(output);
             // create command line text input
             commandLine = createInputField();
             addChild(commandLine);
