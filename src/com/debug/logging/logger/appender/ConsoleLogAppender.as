@@ -32,7 +32,7 @@ package com.debug.logging.logger.appender
          * @param holder The holder where console would be displayed.
          * @param hotkey The hotkey id (it's key code).
          */
-		public function ConsoleLogAppender(holder:DisplayObjectContainer, hotkey:uint)
+		public function ConsoleLogAppender(holder:DisplayObject, hotkey:uint)
 		{
 			this.hotkey = hotkey;
             // create UI of console
