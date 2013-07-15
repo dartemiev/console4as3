@@ -132,7 +132,7 @@ package com.debug.logging.logger
 		 * @param reporter Class provider to get qualified class name.
 		 * @return Qualified class name.
 		 */
-		private static function getReporterClassName(reporter:Class):String
+		private static function getReporterClassName(reporter:Object):String
 		{
 			if (classNameCache[reporter] == null)
 			{
@@ -140,7 +140,6 @@ package com.debug.logging.logger
 			}
 			return classNameCache[reporter];
 		}
-
 
 		/**
 		 *  Pre-defined class-reporter when somewhere <code>Logger.getLogger()</code> is used

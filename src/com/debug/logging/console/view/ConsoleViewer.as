@@ -91,6 +91,7 @@ package com.debug.logging.console.view
          */
 		public function log(level:String, reporter:String, message:String):void
 		{
+            if (message == null) return;
 			// split message by newline and add to the history.
 			const timestamp:String = new Date().toLocaleTimeString();
 			const color:uint = CommandColor.getColor(level);

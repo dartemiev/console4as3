@@ -5,7 +5,7 @@ package com.debug.logging.logger
 		/**
 		 *  The object that printed the message to the log.
 		 */
-		public var reporter:Class;
+		public var reporter:Object;
 
 		/**
 		 *  The message that was printed.
@@ -15,7 +15,7 @@ package com.debug.logging.logger
 		/**
 		 * LogEntity. Constructor.
 		 */
-		public function LogEntity(reporter:Class = null, message:String = null)
+		public function LogEntity(reporter:Object = null, message:String = null)
 		{
 			this.reporter = reporter;
 			this.message = message;
