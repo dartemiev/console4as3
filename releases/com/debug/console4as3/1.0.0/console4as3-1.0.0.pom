@@ -27,7 +27,6 @@
     </developers>
 
     <properties>
-        <github.global.server>github</github.global.server>
         <flexmojos.version>4.2-beta</flexmojos.version>
         <flex.sdk.version>4.6.b.23201</flex.sdk.version>
         <maven.version>3.0.3</maven.version>
@@ -35,7 +34,7 @@
 
     <scm>
         <url>http://github.com/dartemyev/console4as3/tree/master</url>
-        <connection>scm:git:git://github.com/dartemyev/console4as3.git</connection>
+        <connection>scm:git://github.com/dartemyev/console4as3.git</connection>
         <developerConnection>scm:git:git@github.com:dartemyev/console4as3.git</developerConnection>
     </scm>
 
@@ -43,25 +42,6 @@
         <url>https://github.com/dartemyev/console4as3/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub ${project.artifactId} Repository</name>
-            <url>https://raw.github.com/dartemyev/${project.artifactId}/releases</url>
-        </repository>
-
-        <!--<repository>-->
-            <!--<id>console4as3-releases</id>-->
-            <!--<name>Console4as3 Releases</name>-->
-            <!--<url>git:releases://git@github.com:dartemyev/console4as3.git</url>-->
-        <!--</repository>-->
-        <!--<snapshotRepository>-->
-            <!--<id>console4as3-snapshots</id>-->
-            <!--<name>Console4as3 Snapshots</name>-->
-            <!--<url>git:snapshots://git@github.com:dartemyev/console4as3.git</url>-->
-        <!--</snapshotRepository>-->
-    </distributionManagement>
 
     <repositories>
         <repository>
@@ -81,35 +61,6 @@
         <testSourceDirectory>tests</testSourceDirectory>
 
         <plugins>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/releases</altDeploymentRepository>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>0.7</version>
-                <configuration>
-                    <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
-                    <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
-                    <outputDirectory>${project.build.directory}/releases</outputDirectory> <!-- matches distribution management repository url above -->
-                    <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
-                    <includes><include>**/*</include></includes>
-                    <repositoryName>console4as3</repositoryName>      <!-- github repo name -->
-                    <repositoryOwner>dartemyev</repositoryOwner>    <!-- github username  -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.sonatype.flexmojos</groupId>
                 <artifactId>flexmojos-maven-plugin</artifactId>
@@ -148,11 +99,6 @@
             <version>${flex.sdk.version}</version>
             <type>pom</type>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon-ssh-external</artifactId>
-            <version>2.4</version>
         </dependency>
     </dependencies>
 </project>
