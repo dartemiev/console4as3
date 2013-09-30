@@ -113,24 +113,27 @@ package com.debug.logging.console.view
 			resize();
 
 			commandLine.text = "";
-			commandLine.addEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement, false, 0, true);
-			stage.focus = commandLine;
 
 			addEventListener(MouseEvent.CLICK, onSetFocus, false, 0, true);
 			addEventListener(MouseEvent.DOUBLE_CLICK, onCopyLogToClipboard, false, 0, true);
+
+            stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement, false, 0, true);
+            stage.addEventListener(Event.ACTIVATE, onSetFocus);
 			stage.addEventListener(Event.RESIZE, resize, false, 0, true);
+			stage.focus = commandLine;
 		}
 
 		public function deactivate():void
 		{
 			if (stage == null) return;
 
-			stage.focus = null;
-			commandLine.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement);
-
 			removeEventListener(MouseEvent.CLICK, onSetFocus);
 			removeEventListener(MouseEvent.DOUBLE_CLICK, onCopyLogToClipboard);
+
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyManagement);
+            stage.removeEventListener(Event.ACTIVATE, onSetFocus);
 			stage.removeEventListener(Event.RESIZE, resize);
+			stage.focus = null;
 		}
 
 		/**
@@ -158,8 +161,6 @@ package com.debug.logging.console.view
 			outputField.scrollV = outputField.maxScrollV;
         }
 
-
-
 		/**
 		 * Copy full history list to clipboard.
 		 */
@@ -184,6 +185,29 @@ package com.debug.logging.console.view
 			loggingHistory.length = 0;
 			updateHistoryView();
 		}
+
+        /**
+         * Creates new text input to type command for execution.
+         */
+        protected static function createInputField():TextField
+        {
+            var field:TextField = new TextField();
+            field.condenseWhite = false;
+            field.borderColor = 0xcccccc;
+            field.multiline = false;
+            field.wordWrap = false;
+            field.border = true;
+            field.type = TextFieldType.INPUT;
+
+            var format:TextFormat = field.getTextFormat();
+            format.font = "_typewriter";
+            format.size = 11;
+            format.color = 0xffffff;
+            field.setTextFormat(format);
+            field.defaultTextFormat = format;
+
+            return field;
+        }
 
 		/**
 		 * Process user command by typed name and agrs.
@@ -218,26 +242,6 @@ package com.debug.logging.console.view
             outputField.x = outputField.y = PADDING;
         }
 
-        protected function createInputField():TextField
-        {
-            var field:TextField = new TextField();
-            field.condenseWhite = false;
-            field.borderColor = 0xcccccc;
-            field.multiline = false;
-            field.wordWrap = false;
-            field.border = true;
-            field.type = TextFieldType.INPUT;
-
-            var format:TextFormat = field.getTextFormat();
-            format.font = "_typewriter";
-            format.size = 11;
-            format.color = 0xffffff;
-            field.setTextFormat(format);
-            field.defaultTextFormat = format;
-
-            return field;
-        }
-
 		protected function setHistory(old:String):void
 		{
 			commandLine.text = old;
@@ -250,7 +254,7 @@ package com.debug.logging.console.view
 		 * all commands are starting from char "c". AS result will be [clear, copy].
 		 * @see IConsoleCommand
 		 */
-		private function findMatchCommands(pattern:String):Vector.<IConsoleCommand>
+        private static function findMatchCommands(pattern:String):Vector.<IConsoleCommand>
 		{
 			var result:Vector.<IConsoleCommand> = new <IConsoleCommand>[];
 			if ((pattern == null || pattern.length == 0)) return result;
@@ -282,8 +286,8 @@ package com.debug.logging.console.view
 		 */
 		protected function onKeyManagement(event:KeyboardEvent):void
 		{
-			var handler:Function = getPressHandler(event.keyCode);
-			handler.apply(this, [event]);
+            var handler:Function = getPressHandler(event.keyCode);
+            handler.apply(this, [event]);
 		}
 		/**
 		 * The handler about pressing any key in console command line.
@@ -423,9 +427,13 @@ package com.debug.logging.console.view
          * field.
          * @param event Not used.
          */
-        protected function onSetFocus(event:MouseEvent):void
+        protected function onSetFocus(event:Event):void
         {
             stage.focus = commandLine;
+
+            var endIndex:int = commandLine.text.length;
+            commandLine.setSelection(endIndex, endIndex);
+
 			event.stopImmediatePropagation();
         }
 
