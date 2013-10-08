@@ -123,7 +123,9 @@ package com.debug.logging.logger
 			// let list of appender to process log entities
 			for each(var appender:ILogAppender in appenders)
 			{
-				appender.log(type, getReporterClassName(entity.reporter), entity.message);
+                var className:String = getQualifiedClassName(entity.reporter);
+                var parts:Array = className.split("::");
+				appender.log(type, parts[parts.length - 1], entity.message);
 			}
 		}
 
