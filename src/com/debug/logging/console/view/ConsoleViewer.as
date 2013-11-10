@@ -429,12 +429,15 @@ package com.debug.logging.console.view
          */
         protected function onSetFocus(event:Event):void
         {
-            stage.focus = commandLine;
+            if (stage != null)
+            {
+                stage.focus = commandLine;
 
-            var endIndex:int = commandLine.text.length;
-            commandLine.setSelection(endIndex, endIndex);
+                var endIndex:int = commandLine.text.length;
+                commandLine.setSelection(endIndex, endIndex);
 
-			event.stopImmediatePropagation();
+                event.stopImmediatePropagation();
+            }
         }
 
         /**
