@@ -2,7 +2,7 @@ package com.debug.logging.console.command
 {
 	public interface IConsoleCommand
 	{
-		function execute(...args):void;
+		function execute(args:Array = null):void;
 
 		function get name():String;
 

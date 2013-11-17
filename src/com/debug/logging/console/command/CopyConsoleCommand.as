@@ -23,7 +23,7 @@ package com.debug.logging.console.command
         /**
          * @inheritDoc
          */
-        public function execute(...args):void
+        public function execute(args:Array = null):void
         {
             console.copy();
         }

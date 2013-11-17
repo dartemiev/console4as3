@@ -1,9 +1,9 @@
 package com.debug.logging.console.command
 {
-	import com.debug.logging.console.Console;
-	import com.debug.logging.logger.Logger;
+    import com.debug.logging.console.Console;
+    import com.debug.logging.logger.Logger;
 
-	public class HelpConsoleCommand implements IConsoleCommand
+    public class HelpConsoleCommand implements IConsoleCommand
 	{
 		/**
 		 * List of available command for use.
@@ -24,7 +24,7 @@ package com.debug.logging.console.command
 		/**
 		 *  @inheritDoc
 		 */
-		public function execute(...args):void
+		public function execute(args:Array = null):void
 		{
 			const logger:Logger = Console.logger;
 			// display some options for use

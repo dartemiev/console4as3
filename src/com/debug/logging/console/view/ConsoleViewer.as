@@ -69,12 +69,12 @@ package com.debug.logging.console.view
 		 */
 		public function ConsoleViewer()
 		{
-			super();
 			// initialize console stuff
 			loggingHistory = new <History>[];
 			consoleHistory = new <String>[];
             Console.registerCommand(new CopyConsoleCommand(this));
             Console.registerCommand(new ClearConsoleCommand(this));
+
 			// initialize key management handlers
 			pressHandlerMap = new Dictionary(true);
 			pressHandlerMap[Keyboard.ENTER] = onEnterPressed;
@@ -191,20 +191,21 @@ package com.debug.logging.console.view
          */
         protected static function createInputField():TextField
         {
+            var format:TextFormat = new TextFormat();
+            format.color = 0xffffff;
+            format.font = "_typewriter";
+            format.size = 11;
+
             var field:TextField = new TextField();
+            field.defaultTextFormat = format;
+            field.setTextFormat(format);
             field.condenseWhite = false;
             field.borderColor = 0xcccccc;
+            field.selectable = false;
             field.multiline = false;
             field.wordWrap = false;
             field.border = true;
-            field.type = TextFieldType.INPUT;
-
-            var format:TextFormat = field.getTextFormat();
-            format.font = "_typewriter";
-            format.size = 11;
-            format.color = 0xffffff;
-            field.setTextFormat(format);
-            field.defaultTextFormat = format;
+            field.type = TextFieldType.DYNAMIC;
 
             return field;
         }
@@ -279,6 +280,7 @@ package com.debug.logging.console.view
 		{
 			return pressHandlerMap[keyCode] || onAnyPressed;
 		}
+
 		/**
 		 * The handler about pressing buttons on keyboard when user is typing some text in
 		 * command line.
@@ -289,6 +291,7 @@ package com.debug.logging.console.view
             var handler:Function = getPressHandler(event.keyCode);
             handler.apply(this, [event]);
 		}
+
 		/**
 		 * The handler about pressing any key in console command line.
 		 * @param event Not used.
@@ -298,6 +301,7 @@ package com.debug.logging.console.view
 			autoCompleteIndex = -1;
 			autoCompleteMode = false;
 		}
+
 		/**
 		 * The handler about pressing ENTER key in console command line.
 		 * @param event Not used.
@@ -319,6 +323,7 @@ package com.debug.logging.console.view
 			// clear command line
 			commandLine.text = "";
 		}
+
 		/**
 		 * The handler about pressing UP key in console command line. Go to previous used command.
 		 * @param event Prevent event.
@@ -336,6 +341,7 @@ package com.debug.logging.console.view
 
 			event.preventDefault();
 		}
+
 		/**
 		 * The handler about pressing DOWN key in console command line. Go to next used command.
 		 * @param event Prevent event.
@@ -353,6 +359,7 @@ package com.debug.logging.console.view
 
 			event.preventDefault();
 		}
+
 		/**
 		 * The handler about pressing TAB key in console command line. Enter in auto-complete mode.
 		 * @param event Prevent event.
@@ -379,7 +386,10 @@ package com.debug.logging.console.view
 				stage.focus = commandLine;
 				stage.stageFocusRect = stageFocusRect;
 			}
+            event.stopImmediatePropagation();
             event.preventDefault();
+
+            onSetFocus(event);
 		}
 
 		/**
@@ -396,6 +406,7 @@ package com.debug.logging.console.view
 			// SPACE key is also typing char - process any handler
 			onAnyPressed(event);
 		}
+
 		// -------------------------------------------------------------------
         //
         //                        COMMON HANDLERS
@@ -408,10 +419,11 @@ package com.debug.logging.console.view
 
             // create command line text input
             commandLine = createInputField();
+            commandLine.selectable = false;
+            commandLine.type = TextFieldType.INPUT;
             addChild(commandLine);
 
             outputField = createInputField();
-			outputField.selectable = false;
             addChild(outputField);
 
             resize();
@@ -512,6 +524,5 @@ internal class CommandColor
     public static function getColor(level:String):uint
     {
         return colors[level] || 0x00dd00;
-
     }
 }

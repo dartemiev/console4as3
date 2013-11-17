@@ -44,11 +44,12 @@ package com.debug.logging.console
 		}
 
 		/**
-		 * Register a command which the user can execute via the console.
-		 * <p>Arguments are parsed and cast to match the arguments in the user's function. Command names must be
-		 * alphanumeric plus underscore with no spaces.</p>
+		 * Registers a command which the user can execute via the console.
+		 * <p>Arguments are parsed and casted to match the arguments in the user's function.
+         * Command names must be alphanumeric plus underscore with no spaces.</p>
 		 * @param command Console command.
-		 * @see com.debug.logging.console.command.IConsoleCommand
+		 *
+         * @see com.debug.logging.console.command.IConsoleCommand
 		 */
 		public static function registerCommand(command:IConsoleCommand):void
 		{
@@ -66,7 +67,7 @@ package com.debug.logging.console
 
 		/**
 		 * Take a line of console input and process it, executing any command.
-		 * @param line String to parse for command.
+		 * @param line String with command and arguments have to parse.
 		 */
 		public static function processLine(line:String):void
 		{
@@ -97,7 +98,8 @@ package com.debug.logging.console
 			// invoke command
 			try
 			{
-				command.execute(args[1]);
+                args.shift();
+				command.execute(args);
 			}
 			catch(ex:Error)
 			{

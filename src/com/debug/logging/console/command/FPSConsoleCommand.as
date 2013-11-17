@@ -1,12 +1,12 @@
 package com.debug.logging.console.command
 {
-	import com.debug.Stats;
-	import com.debug.logging.console.Console;
-	import com.debug.logging.logger.Logger;
+    import com.debug.Stats;
+    import com.debug.logging.console.Console;
+    import com.debug.logging.logger.Logger;
 
-	import flash.display.DisplayObjectContainer;
+    import flash.display.DisplayObjectContainer;
 
-	public class FPSConsoleCommand implements IConsoleCommand
+    public class FPSConsoleCommand implements IConsoleCommand
 	{
 		/**
 		 * View of stats.
@@ -17,7 +17,7 @@ package com.debug.logging.console.command
 		/**
 		 * @inheritDoc
 		 */
-		public function execute(...args):void
+		public function execute(args:Array = null):void
 		{
 			const logger:Logger = Console.logger;
 			const holder:DisplayObjectContainer = Console.stage;
